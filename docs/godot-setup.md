@@ -26,6 +26,16 @@ This repository contains a playable Godot 4 prototype scaffold.
 7. Use keyboard **Up** and **Down** arrows to scroll the tall tower view. There is no visible scroll bar.
 8. Click **Reset** to return to the setup menu.
 
+## Smartphone HUD layout
+
+The scene is split into three fixed regions:
+
+- Top HUD: title, current level and compact stats.
+- Tower viewport: clipped construction area that contains the scrollable tower.
+- Bottom HUD: choice cards, Level Up, hint and Reset.
+
+Only the tower viewport should move when the tower grows or the player scrolls. The top and bottom HUD backdrops are fixed to keep the interface readable on a vertical smartphone screen.
+
 ## Current building types
 
 - Жилище
@@ -82,7 +92,6 @@ Mirrored and lying L forms are separate card footprints. They are filtered by th
 - `project.godot` at the repository root.
 - `scenes/main.tscn` as the startup scene.
 - `scripts/main.gd` as the playable prototype script.
-- `icon.svg` as a lightweight project icon.
 
 ## Current state
 

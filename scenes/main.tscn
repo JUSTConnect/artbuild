@@ -20,6 +20,27 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.08, 0.09, 0.11, 1)
 
+[node name="TopHudBackdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 112.0
+grow_horizontal = 2
+color = Color(0.05, 0.055, 0.07, 0.94)
+mouse_filter = 2
+
+[node name="BottomHudBackdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -176.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.05, 0.055, 0.07, 0.96)
+mouse_filter = 2
+
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -113,9 +134,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -360.0
-offset_top = 48.0
+offset_top = 46.0
 offset_right = -20.0
-offset_bottom = 118.0
+offset_bottom = 106.0
 grow_horizontal = 0
 text = "Stats"
 horizontal_alignment = 0
@@ -127,9 +148,9 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 20.0
-offset_top = 48.0
+offset_top = 46.0
 offset_right = -380.0
-offset_bottom = 96.0
+offset_bottom = 106.0
 grow_horizontal = 2
 text = "Level"
 horizontal_alignment = 1
