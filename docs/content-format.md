@@ -25,6 +25,8 @@ Required fields:
 The first catalog lives in `src/content/buildings/building-definitions.js` and includes:
 
 - `foundation_island_01`
+- `foundation_reef_01`
+- `floating_foundation_01`
 - `residential_small_01`
 - `cafe_small_01`
 - `library_small_01`
@@ -32,9 +34,12 @@ The first catalog lives in `src/content/buildings/building-definitions.js` and i
 - `art_studio_small_01`
 - `windmill_small_01`
 - `decor_balcony_01`
+- `wooden_bridge_01`
 - `roof_garden_01`
 
 This covers the first prototype categories: `Residential`, `Recreation`, `Knowledge`, `Technology`, `Art`, `Energy`, `Decor` and `Foundation`.
+
+The catalog also now covers several placement shapes: top-stacked buildings, side elements, bridge pieces and multiple foundation options.
 
 ## Validation
 
