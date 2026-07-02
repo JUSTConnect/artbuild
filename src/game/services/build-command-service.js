@@ -1,7 +1,11 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
-import { recalculateProgressionState } from "../../domain/progression/index.js";
+import {
+  getProgressionMetrics,
+  isBuildingUnlocked,
+  recalculateProgressionState
+} from "../../domain/progression/index.js";
 import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
@@ -24,6 +28,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
 
   if (!buildingDefinition) {
     throw new Error(`Unknown building definition: ${session.selectedBuildingId}`);
+  }
+
+  if (!isBuildingUnlocked(buildingDefinition, getProgressionMetrics(session.tower))) {
+    throw new Error(`Building is locked: ${buildingDefinition.id}`);
   }
 
   const targetSlotId = slotId ?? getFirstValidTopSlot(session.tower, buildingDefinition)?.id;
