@@ -1,4 +1,5 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
+import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { createTowerState } from "../../domain/tower/index.js";
 
 export function createGameSession({
@@ -16,7 +17,7 @@ export function createGameSession({
     id,
     turn: 0,
     selectedBuildingId: null,
-    tower: createTowerState({ id: towerId, foundationDefinition }),
+    tower: recalculateEnergyState(createTowerState({ id: towerId, foundationDefinition })),
     events: Object.freeze([
       Object.freeze({
         type: "session_started",
