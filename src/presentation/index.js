@@ -6,6 +6,7 @@ export {
 } from "./tower-view/text-tower-view.js";
 export { getEnergyFeedback, renderEnergyFeedbackText } from "./animation/energy-feedback.js";
 export { renderChoiceCardsText, renderChoiceCardText } from "./ui/choice-cards.js";
+export { getComfortMood, getResidentsPanel, renderResidentsPanelText } from "./ui/residents-panel.js";
 
 export const presentationModules = Object.freeze([
   Object.freeze({
@@ -16,7 +17,13 @@ export const presentationModules = Object.freeze([
   Object.freeze({
     name: "presentation/ui",
     responsibility: "Renders selection cards, stats and player-facing prompts.",
-    exports: ["renderChoiceCardsText", "renderChoiceCardText"]
+    exports: [
+      "renderChoiceCardsText",
+      "renderChoiceCardText",
+      "getResidentsPanel",
+      "renderResidentsPanelText",
+      "getComfortMood"
+    ]
   }),
   Object.freeze({
     name: "presentation/animation",
