@@ -6,7 +6,9 @@
   "description": "Engine-agnostic prototype scaffold for Artbuild.",
   "scripts": {
     "start": "node src/app/main.js",
-    "smoke": "node test/smoke-test.js"
+    "smoke": "node test/smoke-test.js",
+    "test": "node test/smoke-test.js && node test/building-definitions.test.js",
+    "validate:content": "node test/building-definitions.test.js"
   },
   "engines": {
     "node": ">=20"

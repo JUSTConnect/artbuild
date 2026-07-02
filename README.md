@@ -33,10 +33,12 @@
 
 ```bash
 npm run smoke
+npm run validate:content
+npm test
 npm start
 ```
 
-`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы.
+`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков.
 
 ## Документация
 
@@ -46,6 +48,7 @@ npm start
 - [Building System](docs/building-system.md) — система домиков, блоков, размещения и стыковки.
 - [Progression and Balance](docs/progression-and-balance.md) — жители, энергия, красота, технология, прогрессия и ограничения роста.
 - [Architecture](docs/architecture.md) — предлагаемая расширяемая архитектура проекта без монолита.
+- [Content Format](docs/content-format.md) — формат BuildingDefinition, первый каталог и правила валидации.
 - [Development Structure](docs/development-structure.md) — текущий модульный каркас, границы слоёв и команды запуска.
 - [Visual Style](docs/visual-style.md) — визуальный стиль, башни, домики, органический рост и share-видео.
 - [Roadmap](docs/roadmap.md) — этапы разработки от простого прототипа до полноценной мобильной игры.
