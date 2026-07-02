@@ -69,6 +69,8 @@ export function placeBuilding(towerState, buildingDefinition, slotId, options = 
         buildingId: buildingDefinition.id,
         instanceId,
         slotId,
+        connectionType: slot.connectionType,
+        selectedFunction,
         position: placedBuilding.position
       })
     ])
