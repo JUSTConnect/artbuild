@@ -111,7 +111,7 @@ var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	rng.randomize()
-	for index in choice_buttons.size():
+	for index in range(choice_buttons.size()):
 		choice_buttons[index].pressed.connect(_on_choice_pressed.bind(index))
 	reset_button.pressed.connect(reset_game)
 	reset_game()
@@ -145,34 +145,34 @@ func _on_choice_pressed(index: int) -> void:
 func build(definition: Dictionary) -> void:
 	turn += 1
 	placed_blocks.append(definition)
-	capacity += int(definition.residents)
-	energy_produced += max(int(definition.energy), 0)
-	energy_required += abs(min(int(definition.energy), 0))
-	beauty += int(definition.beauty)
-	technology += int(definition.tech)
-	comfort += int(definition.comfort)
+	capacity += int(definition["residents"])
+	energy_produced += max(int(definition["energy"]), 0)
+	energy_required += abs(min(int(definition["energy"]), 0))
+	beauty += int(definition["beauty"])
+	technology += int(definition["tech"])
+	comfort += int(definition["comfort"])
 	population = min(capacity, max(0, comfort * 2))
 	_add_visual_block(definition, placed_blocks.size())
 	roll_choices()
 	update_stats()
-	hint.text = "Built: %s. Pick the next piece." % definition.title
+	hint.text = "Built: %s. Pick the next piece." % str(definition["title"])
 
 func roll_choices() -> void:
 	current_choices.clear()
 	var pool := _available_pool()
 	pool.shuffle()
-	for index in min(3, pool.size()):
+	for index in range(min(3, pool.size())):
 		current_choices.append(pool[index])
-	for index in choice_buttons.size():
+	for index in range(choice_buttons.size()):
 		if index < current_choices.size():
 			var item := current_choices[index]
 			choice_buttons[index].disabled = false
-			choice_buttons[index].text = "%s\n%s\nEnergy %+d  Beauty +%d  Tech +%d" % [
-				item.glyph,
-				item.title,
-				int(item.energy),
-				int(item.beauty),
-				int(item.tech)
+			choice_buttons[index].text = "%s\n%s\nEnergy %s  Beauty +%d  Tech +%d" % [
+				str(item["glyph"]),
+				str(item["title"]),
+				_signed(int(item["energy"])),
+				int(item["beauty"]),
+				int(item["tech"])
 			]
 		else:
 			choice_buttons[index].disabled = true
@@ -186,7 +186,7 @@ func _available_pool() -> Array[Dictionary]:
 	return pool
 
 func _is_unlocked(item: Dictionary) -> bool:
-	match item.id:
+	match str(item["id"]):
 		"workshop":
 			return technology >= 2
 		"studio":
@@ -201,7 +201,7 @@ func _is_unlocked(item: Dictionary) -> bool:
 func _add_visual_block(definition: Dictionary, index: int) -> void:
 	var block := ColorRect.new()
 	var width := 180.0 + float(rng.randi_range(-28, 34))
-	if definition.glyph == "___":
+	if str(definition["glyph"]) == "___":
 		width = 300.0
 	var height := 54.0
 	var x_offset := float(rng.randi_range(-72, 72))
@@ -210,14 +210,14 @@ func _add_visual_block(definition: Dictionary, index: int) -> void:
 	var y := 650.0 - float(index) * 58.0
 	block.position = Vector2(240.0 - width / 2.0 + x_offset, y)
 	block.size = Vector2(width, height)
-	block.color = definition.color
+	block.color = definition["color"]
 	block.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tower.add_child(block)
 
 	var label := Label.new()
 	label.position = block.position
 	label.size = block.size
-	label.text = "%s  %s" % [definition.glyph, definition.title]
+	label.text = "%s  %s" % [str(definition["glyph"]), str(definition["title"])]
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -238,3 +238,8 @@ func update_stats() -> void:
 		technology,
 		comfort
 	]
+
+func _signed(value: int) -> String:
+	if value > 0:
+		return "+%d" % value
+	return str(value)
