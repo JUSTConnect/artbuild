@@ -6,7 +6,6 @@ const LEVEL_H: float = 74.0
 const SURFACE_GAP: float = 84.0
 const BASE_Y_PAD: float = 72.0
 const TOP_SCROLL_PAD: float = 64.0
-
 const TERRAIN_KEYS: Array[String] = ["plateau", "river", "islands", "mountains"]
 
 const BUILDING_TYPES: Array[Dictionary] = [
@@ -73,7 +72,6 @@ var selected_building: Dictionary = {}
 var selected_choice_index: int = -1
 var unlocked_level: int = 1
 var scroll_offset: float = 0.0
-
 var turn: int = 0
 var population: int = 0
 var capacity: int = 0
@@ -170,14 +168,10 @@ func _build_surfaces() -> void:
 	surfaces.clear()
 	var count: int = 1
 	match terrain_type:
-		"river":
-			count = 2
-		"islands":
-			count = rng.randi_range(3, 4)
-		"mountains":
-			count = rng.randi_range(2, 4)
-		_:
-			count = 1
+		"river": count = 2
+		"islands": count = rng.randi_range(3, 4)
+		"mountains": count = rng.randi_range(2, 4)
+		_: count = 1
 	for index: int in range(count):
 		var cells: int = cells_per_level
 		var base_raise: int = 0
@@ -324,35 +318,30 @@ func _make_choice(building_type: Dictionary, shape: Dictionary) -> Dictionary:
 	var raw_cells: Array = shape["cells"]
 	for index: int in range(raw_cells.size()):
 		footprint.append(raw_cells[index] as Vector2i)
-	var choice: Dictionary = {}
-	choice["id"] = str(building_type["id"])
-	choice["title"] = str(building_type["title"])
-	choice["glyph"] = str(building_type["glyph"])
-	choice["color"] = building_type["color"] as Color
-	choice["residents"] = int(building_type["residents"])
-	choice["energy"] = int(building_type["energy"])
-	choice["beauty"] = int(building_type["beauty"])
-	choice["tech"] = int(building_type["tech"])
-	choice["comfort"] = int(building_type["comfort"])
-	choice["shape_id"] = str(shape["id"])
-	choice["shape_title"] = str(shape["title"])
-	choice["footprint"] = footprint
-	choice["shape_w"] = _footprint_width(footprint)
-	choice["shape_h"] = _footprint_height(footprint)
-	return choice
+	return {
+		"id": str(building_type["id"]),
+		"title": str(building_type["title"]),
+		"glyph": str(building_type["glyph"]),
+		"color": building_type["color"] as Color,
+		"residents": int(building_type["residents"]),
+		"energy": int(building_type["energy"]),
+		"beauty": int(building_type["beauty"]),
+		"tech": int(building_type["tech"]),
+		"comfort": int(building_type["comfort"]),
+		"shape_id": str(shape["id"]),
+		"shape_title": str(shape["title"]),
+		"footprint": footprint,
+		"shape_w": _footprint_width(footprint),
+		"shape_h": _footprint_height(footprint)
+	}
 
 func _is_building_type_unlocked(item: Dictionary) -> bool:
 	match str(item["id"]):
-		"lab":
-			return technology >= 3
-		"university":
-			return technology >= 5 and population >= 4
-		"school":
-			return population >= 2 or unlocked_level >= 2
-		"shop":
-			return population >= 2 or beauty >= 4
-		_:
-			return true
+		"lab": return technology >= 3
+		"university": return technology >= 5 and population >= 4
+		"school": return population >= 2 or unlocked_level >= 2
+		"shop": return population >= 2 or beauty >= 4
+		_: return true
 
 func _has_valid_anchor(choice: Dictionary) -> bool:
 	for surface_index: int in range(surfaces.size()):
@@ -464,14 +453,12 @@ func _draw_block(block: Dictionary) -> void:
 	for index: int in range(footprint.size()):
 		var rel: Vector2i = footprint[index] as Vector2i
 		var pos: Vector2 = _slot_position(surface_index, anchor_level + rel.y, anchor_cell + rel.x)
-		var color: Color = building["color"] as Color
-		_add_rect(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), color)
-		var text: String = ""
+		var fill_color: Color = building["color"] as Color
+		_add_rect(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), fill_color)
+		var cell_text: String = str(building["glyph"])
 		if index == 0:
-			text = "%s\n%s" % [str(building["glyph"]), str(building["shape_title"])]
-		else:
-			text = str(building["glyph"])
-		var label: Label = _add_label(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), text)
+			cell_text = "%s\n%s" % [str(building["glyph"]), str(building["shape_title"])]
+		var label: Label = _add_label(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), cell_text)
 		label.modulate = Color(0.08, 0.09, 0.11, 1.0)
 
 func _draw_current_level_slots() -> void:
@@ -486,31 +473,31 @@ func _draw_current_level_slots() -> void:
 			if not should_draw:
 				continue
 			var pos: Vector2 = _slot_position(surface_index, unlocked_level, cell)
-			var button: Button = Button.new()
-			button.position = pos
-			button.size = Vector2(CELL_W - 8.0, CELL_H - 8.0)
-			button.text = "L%d\nslot" % unlocked_level
+			var slot_button: Button = Button.new()
+			slot_button.position = pos
+			slot_button.size = Vector2(CELL_W - 8.0, CELL_H - 8.0)
+			slot_button.text = "L%d\nslot" % unlocked_level
 			if selected_building.is_empty():
-				button.modulate = Color(0.95, 0.84, 0.32, 0.85)
+				slot_button.modulate = Color(0.95, 0.84, 0.32, 0.85)
 			else:
-				button.modulate = Color(0.55, 0.95, 0.62, 1.0)
-			button.pressed.connect(_on_slot_pressed.bind(surface_index, cell))
-			tower.add_child(button)
+				slot_button.modulate = Color(0.55, 0.95, 0.62, 1.0)
+			slot_button.pressed.connect(_on_slot_pressed.bind(surface_index, cell))
+			tower.add_child(slot_button)
 
-func _add_rect(pos: Vector2, size: Vector2, color: Color) -> ColorRect:
+func _add_rect(pos: Vector2, rect_size: Vector2, fill_color: Color) -> ColorRect:
 	var rect: ColorRect = ColorRect.new()
 	rect.position = pos
-	rect.size = size
-	rect.color = color
+	rect.size = rect_size
+	rect.color = fill_color
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tower.add_child(rect)
 	return rect
 
-func _add_label(pos: Vector2, size: Vector2, text: String) -> Label:
+func _add_label(pos: Vector2, label_size: Vector2, label_text: String) -> Label:
 	var label: Label = Label.new()
 	label.position = pos
-	label.size = size
-	label.text = text
+	label.size = label_size
+	label.text = label_text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -532,20 +519,16 @@ func _level_y(surface_index: int, level: int) -> float:
 
 func _surface_name(surface_index: int) -> String:
 	match terrain_type:
-		"river":
-			return "Берег %d" % (surface_index + 1)
-		"islands":
-			return "Остров %d" % (surface_index + 1)
-		"mountains":
-			return "Гора %d" % (surface_index + 1)
-		_:
-			return "Плато"
+		"river": return "Берег %d" % (surface_index + 1)
+		"islands": return "Остров %d" % (surface_index + 1)
+		"mountains": return "Гора %d" % (surface_index + 1)
+		_: return "Плато"
 
 func _update_level_button() -> void:
-	var ready: bool = _can_level_up()
+	var is_level_ready: bool = _can_level_up()
 	var req: Dictionary = _level_up_requirements()
-	level_up_button.disabled = not ready
-	if ready:
+	level_up_button.disabled = not is_level_ready
+	if is_level_ready:
 		level_up_button.modulate = Color(0.55, 1.0, 0.52, 1.0)
 		level_up_button.text = "LEVEL UP"
 	else:
@@ -578,14 +561,10 @@ func _selected_title() -> String:
 
 func _terrain_title() -> String:
 	match terrain_type:
-		"river":
-			return "Река"
-		"islands":
-			return "Острова"
-		"mountains":
-			return "Горы"
-		_:
-			return "Плато"
+		"river": return "Река"
+		"islands": return "Острова"
+		"mountains": return "Горы"
+		_: return "Плато"
 
 func _scroll_by(delta: float) -> void:
 	scroll_offset += delta
