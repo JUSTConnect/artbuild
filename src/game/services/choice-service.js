@@ -27,6 +27,7 @@ export function createChoiceCard(definition, tower) {
     visualPrefabId: definition.visualPrefabId,
     functionOptions: Object.freeze([...definition.functionOptions]),
     baseStats: Object.freeze({ ...definition.baseStats }),
+    placementRules: Object.freeze({ ...(definition.placementRules ?? {}) }),
     unlockRequirements: Object.freeze({ ...(definition.unlockRequirements ?? {}) }),
     validSlotIds: Object.freeze(validSlotIds),
     isPlayable: validSlotIds.length > 0,

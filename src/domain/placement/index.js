@@ -1,5 +1,11 @@
 export { createPlacementSlot, createSlotId } from "./placement-slot.js";
-export { canPlaceBuilding, createTopSlotsForBuilding, getAvailableSlots, placeBuilding } from "./placement-service.js";
+export {
+  canPlaceBuilding,
+  createSlotsForBuilding,
+  createTopSlotsForBuilding,
+  getAvailableSlots,
+  placeBuilding
+} from "./placement-service.js";
 
 export const placementModule = Object.freeze({
   name: "domain/placement",
@@ -10,6 +16,7 @@ export const placementModule = Object.freeze({
     "getAvailableSlots",
     "canPlaceBuilding",
     "placeBuilding",
-    "createTopSlotsForBuilding"
+    "createTopSlotsForBuilding",
+    "createSlotsForBuilding"
   ]
 });

@@ -13,6 +13,32 @@ export const buildingDefinitions = Object.freeze([
     placementRules: { startOnly: true, createsSlots: ["Top"] }
   }),
   Object.freeze({
+    id: "foundation_reef_01",
+    name: "Reef Foundation",
+    category: "Foundation",
+    size: { w: 4, h: 1 },
+    allowedConnections: ["Top"],
+    functionOptions: ["Foundation"],
+    baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 3, technology: 0, comfort: 1 },
+    unlockRequirements: { initiallyUnlocked: true },
+    visualPrefabId: "placeholder/foundation/reef_01",
+    rarity: "Common",
+    placementRules: { startOnly: true, createsSlots: ["Top"] }
+  }),
+  Object.freeze({
+    id: "floating_foundation_01",
+    name: "Floating Foundation",
+    category: "Foundation",
+    size: { w: 2, h: 1 },
+    allowedConnections: ["Bridge"],
+    functionOptions: ["Foundation"],
+    baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 2, technology: 0, comfort: 2 },
+    unlockRequirements: { minBeauty: 5, minTechnology: 3 },
+    visualPrefabId: "placeholder/foundation/floating_01",
+    rarity: "Uncommon",
+    placementRules: { requiresBridgeAnchor: true, createsSlots: ["Top", "Bridge"] }
+  }),
+  Object.freeze({
     id: "residential_small_01",
     name: "Small Residential House",
     category: "Residential",
@@ -23,7 +49,7 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { initiallyUnlocked: true },
     visualPrefabId: "placeholder/buildings/residential_small_01",
     rarity: "Common",
-    placementRules: { requiresSupport: true, createsSlots: ["Top", "SideLeft", "SideRight"] }
+    placementRules: { requiresSupport: true, createsSlots: ["Top", "SideLeft", "SideRight", "Bridge"] }
   }),
   Object.freeze({
     id: "cafe_small_01",
@@ -36,7 +62,7 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { initiallyUnlocked: true },
     visualPrefabId: "placeholder/buildings/cafe_small_01",
     rarity: "Common",
-    placementRules: { requiresSupport: true, createsSlots: ["Top", "Decor"] }
+    placementRules: { requiresSupport: true, createsSlots: ["Top", "Decor", "Bridge"] }
   }),
   Object.freeze({
     id: "library_small_01",
@@ -62,7 +88,7 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { minTechnology: 2 },
     visualPrefabId: "placeholder/buildings/workshop_small_01",
     rarity: "Common",
-    placementRules: { requiresSupport: true, createsSlots: ["Top", "Utility"] }
+    placementRules: { requiresSupport: true, createsSlots: ["Top", "Utility", "Bridge"] }
   }),
   Object.freeze({
     id: "art_studio_small_01",
@@ -75,7 +101,7 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { minBeauty: 5 },
     visualPrefabId: "placeholder/buildings/art_studio_small_01",
     rarity: "Uncommon",
-    placementRules: { requiresSupport: true, createsSlots: ["Top", "Decor"] }
+    placementRules: { requiresSupport: true, createsSlots: ["Top", "Decor", "Bridge"] }
   }),
   Object.freeze({
     id: "windmill_small_01",
@@ -88,7 +114,7 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { initiallyUnlocked: true },
     visualPrefabId: "placeholder/buildings/windmill_small_01",
     rarity: "Common",
-    placementRules: { requiresSupport: true, energyRadius: 1, createsSlots: ["Utility"] }
+    placementRules: { requiresSupport: true, energyRadius: 1, createsSlots: ["Utility", "Bridge"] }
   }),
   Object.freeze({
     id: "decor_balcony_01",
@@ -101,7 +127,20 @@ export const buildingDefinitions = Object.freeze([
     unlockRequirements: { minBeauty: 4 },
     visualPrefabId: "placeholder/decor/balcony_01",
     rarity: "Common",
-    placementRules: { requiresSideAnchor: true, createsSlots: [] }
+    placementRules: { requiresSideAnchor: true, createsSlots: ["Decor"] }
+  }),
+  Object.freeze({
+    id: "wooden_bridge_01",
+    name: "Wooden Bridge",
+    category: "Decor",
+    size: { w: 2, h: 1 },
+    allowedConnections: ["Bridge"],
+    functionOptions: ["Decor"],
+    baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 1, technology: 0, comfort: 1 },
+    unlockRequirements: { minTechnology: 2 },
+    visualPrefabId: "placeholder/decor/wooden_bridge_01",
+    rarity: "Common",
+    placementRules: { requiresBridgeAnchor: true, createsSlots: ["Bridge", "Top"] }
   }),
   Object.freeze({
     id: "roof_garden_01",
