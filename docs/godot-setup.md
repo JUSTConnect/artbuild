@@ -48,14 +48,23 @@ Current shapes include:
 - 1 wide / 3 high;
 - 2 wide / 1 high;
 - 2x2;
+- 2 wide / 3 high;
 - 3 wide / 1 high;
 - 3 wide / 2 high;
-- L shape;
-- Tall L shape.
+- 3x3;
+- 2x2 L variants: left, right and upper;
+- 2x3 tall L variants: left, right and upper;
+- 3x2 flat / лежачая L variants: left, right, upper and mirrored;
+- 3x3 corner variants;
+- T shape;
+- Tall T shape;
+- U shape.
 
 A tall building occupies cells on future levels. For example, a 1x3 building placed on level 1 blocks the same column on levels 1, 2 and 3. You can only build above it after unlocking a high enough level.
 
 An L-shaped building only blocks the cells that belong to its actual shape. This means the open part above the shorter side can be used earlier, while the tall side stays blocked until higher levels are unlocked.
+
+Mirrored and lying L forms are separate card footprints. They are filtered by the same placement rules, so a mirrored form appears only if it can actually fit inside the available foundation cells.
 
 ## Current rules
 
