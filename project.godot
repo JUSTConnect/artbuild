@@ -15,6 +15,10 @@ config/description="Calm vertical tower-building prototype."
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
+[autoload]
+
+CameraInput="*res://scripts/camera_input.gd"
+
 [display]
 
 window/size/viewport_width=1080
