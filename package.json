@@ -8,13 +8,14 @@
     "start": "node src/app/main.js",
     "prototype:loop": "node src/tools/prototypes/playable-loop.js 10",
     "smoke": "node test/smoke-test.js",
-    "test": "node test/smoke-test.js && node test/building-definitions.test.js && node test/placement.test.js && node test/playable-loop.test.js && node test/choice-service.test.js && node test/energy-system.test.js && node test/residents-comfort.test.js && node test/progression-unlocks.test.js",
+    "test": "node test/smoke-test.js && node test/building-definitions.test.js && node test/placement.test.js && node test/playable-loop.test.js && node test/choice-service.test.js && node test/energy-system.test.js && node test/residents-comfort.test.js && node test/progression-unlocks.test.js && node test/side-bridges-foundations.test.js",
     "test:choice": "node test/choice-service.test.js",
     "test:energy": "node test/energy-system.test.js",
     "test:placement": "node test/placement.test.js",
     "test:playable-loop": "node test/playable-loop.test.js",
     "test:progression": "node test/progression-unlocks.test.js",
     "test:residents": "node test/residents-comfort.test.js",
+    "test:side-bridges": "node test/side-bridges-foundations.test.js",
     "validate:content": "node test/building-definitions.test.js"
   },
   "engines": {
