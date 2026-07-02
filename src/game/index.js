@@ -1,5 +1,10 @@
 export { createGameSession, selectBuilding, updateSessionTower } from "./session/game-session.js";
-export { buildSelectedBuilding, getFirstValidTopSlot, selectAndBuild } from "./services/build-command-service.js";
+export {
+  buildSelectedBuilding,
+  getFirstValidSlot,
+  getFirstValidTopSlot,
+  selectAndBuild
+} from "./services/build-command-service.js";
 export { compareChoiceCards, createChoiceCard, getChoiceOptions, requireChoiceOption } from "./services/choice-service.js";
 export { getPrototypeBuildOptions, runPrototypeBuildLoop } from "./services/prototype-loop.js";
 
@@ -14,6 +19,8 @@ export const gameModules = Object.freeze([
     exports: [
       "buildSelectedBuilding",
       "selectAndBuild",
+      "getFirstValidSlot",
+      "getFirstValidTopSlot",
       "getChoiceOptions",
       "createChoiceCard",
       "requireChoiceOption",
