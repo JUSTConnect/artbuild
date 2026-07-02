@@ -1,7 +1,16 @@
 import { buildingDefinitions } from "./buildings/index.js";
+import { getPolishContentSummary, prototypeContentGoals } from "./palettes/polish-content-summary.js";
 import { buildingCategories, connectionTypes, functionOptions, rarityLevels } from "./rules/building-taxonomy.js";
 
-export { buildingDefinitions, buildingCategories, connectionTypes, functionOptions, rarityLevels };
+export {
+  buildingDefinitions,
+  buildingCategories,
+  connectionTypes,
+  functionOptions,
+  getPolishContentSummary,
+  prototypeContentGoals,
+  rarityLevels
+};
 
 export const contentModules = Object.freeze([
   Object.freeze({
@@ -21,6 +30,7 @@ export const contentModules = Object.freeze([
   }),
   Object.freeze({
     name: "content/palettes",
-    responsibility: "Stores visual palette and district metadata."
+    responsibility: "Stores visual palette and district metadata.",
+    exports: ["getPolishContentSummary", "prototypeContentGoals"]
   })
 ]);

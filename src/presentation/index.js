@@ -6,6 +6,7 @@ export {
 } from "./tower-view/text-tower-view.js";
 export { getEnergyFeedback, renderEnergyFeedbackText } from "./animation/energy-feedback.js";
 export { renderChoiceCardsText, renderChoiceCardText } from "./ui/choice-cards.js";
+export { createMobileHudState, renderMobileHudText } from "./ui/mobile-hud.js";
 export { getProgressionPanel, renderProgressionPanelText } from "./ui/progression-panel.js";
 export { renderReplayTimelineText, renderShareSummaryText } from "./ui/replay-panel.js";
 export { getComfortMood, getResidentsPanel, renderResidentsPanelText } from "./ui/residents-panel.js";
@@ -22,6 +23,8 @@ export const presentationModules = Object.freeze([
     exports: [
       "renderChoiceCardsText",
       "renderChoiceCardText",
+      "createMobileHudState",
+      "renderMobileHudText",
       "getProgressionPanel",
       "renderProgressionPanelText",
       "renderReplayTimelineText",
