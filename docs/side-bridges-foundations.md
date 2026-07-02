@@ -27,13 +27,13 @@ It supports:
 
 ### Side slots
 
-Buildings can create `SideLeft` and `SideRight` slots. These support small decor pieces and bridge pieces.
+Buildings can create `SideLeft` and `SideRight` slots. These support small side decor pieces.
 
 The first active example is `decor_balcony_01`.
 
 ### Bridge slots
 
-Buildings can create `Bridge` slots. A bridge slot supports wider pieces and lets the tower grow horizontally.
+Buildings can create `Bridge` slots. A bridge slot supports wider bridge pieces and lets the tower grow horizontally.
 
 The first active bridge is `wooden_bridge_01`.
 
