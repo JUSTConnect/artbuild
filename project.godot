@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
 ; since the parameters that go here are not all obvious.
@@ -6,10 +7,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
+=======
+>>>>>>> 50f52604f56a1b583a3dbba0ff2a956c610c79c6
 config_version=5
 
 [application]
 
+<<<<<<< HEAD
 config/name="artbuild"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -23,3 +27,22 @@ config/icon="res://icon.svg"
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+=======
+config/name="Artbuild"
+config/description="Calm vertical tower-building prototype."
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/handheld/orientation=1
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="mobile"
+>>>>>>> 50f52604f56a1b583a3dbba0ff2a956c610c79c6
