@@ -6,6 +6,10 @@ const LEVEL_H: float = 74.0
 const SURFACE_GAP: float = 84.0
 const BASE_Y_PAD: float = 72.0
 const TOP_SCROLL_PAD: float = 64.0
+const TOP_UI_H: float = 112.0
+const BOTTOM_UI_H: float = 176.0
+const UI_PAD: float = 20.0
+const MIN_TOWER_H: float = 180.0
 const TERRAIN_KEYS: Array[String] = ["plateau", "river", "islands", "mountains"]
 
 const BUILDING_TYPES: Array[Dictionary] = [
@@ -47,6 +51,7 @@ const SHAPES: Array[Dictionary] = [
 	{"id":"U3", "title":"U shape", "cells":[Vector2i(0, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]}
 ]
 
+@onready var title_label: Label = $Title
 @onready var menu_panel: Control = $MenuPanel
 @onready var cells_option: OptionButton = $MenuPanel/CellsOption
 @onready var terrain_option: OptionButton = $MenuPanel/TerrainOption
@@ -89,7 +94,67 @@ func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
 	reset_button.pressed.connect(show_menu)
 	level_up_button.pressed.connect(_on_level_up_pressed)
+	_fit_fixed_layout()
 	show_menu()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED and is_node_ready():
+		_fit_fixed_layout()
+		if game_started:
+			render_world()
+			_scroll_to_active_content()
+
+func _fit_fixed_layout() -> void:
+	var root_size: Vector2 = self.size
+	if root_size.x < 1.0 or root_size.y < 1.0:
+		return
+	var bottom_y: float = root_size.y - BOTTOM_UI_H
+	var tower_h: float = root_size.y - TOP_UI_H - BOTTOM_UI_H
+	if tower_h < MIN_TOWER_H:
+		tower_h = MIN_TOWER_H
+
+	title_label.position = Vector2(0.0, 10.0)
+	title_label.size = Vector2(root_size.x, 32.0)
+	level_info.position = Vector2(UI_PAD, 46.0)
+	level_info.size = Vector2(root_size.x - 400.0, 58.0)
+	if level_info.size.x < 260.0:
+		level_info.size = Vector2(root_size.x - UI_PAD * 2.0, 44.0)
+	stats.position = Vector2(root_size.x - 360.0, 46.0)
+	stats.size = Vector2(340.0, 92.0)
+	if root_size.x < 720.0:
+		stats.visible = false
+	else:
+		stats.visible = game_started
+
+	tower_area.position = Vector2(UI_PAD, TOP_UI_H)
+	tower_area.size = Vector2(root_size.x - UI_PAD * 2.0, tower_h)
+	choice_bar.position = Vector2(UI_PAD, bottom_y + 12.0)
+	choice_bar.size = Vector2(root_size.x - UI_PAD * 2.0, 92.0)
+	for button_index: int in range(choice_buttons.size()):
+		choice_buttons[button_index].custom_minimum_size = Vector2(0.0, 90.0)
+	level_up_button.position = Vector2(UI_PAD, root_size.y - 56.0)
+	level_up_button.size = Vector2(190.0, 42.0)
+	reset_button.position = Vector2(root_size.x - 186.0, root_size.y - 56.0)
+	reset_button.size = Vector2(166.0, 42.0)
+	hint.position = Vector2(226.0, root_size.y - 56.0)
+	hint.size = Vector2(root_size.x - 432.0, 42.0)
+	if hint.size.x < 120.0:
+		hint.visible = false
+	elif game_started:
+		hint.visible = true
+
+	var menu_w: float = 620.0
+	var menu_h: float = 500.0
+	if root_size.x < menu_w + 40.0:
+		menu_w = root_size.x - 40.0
+	if root_size.y < menu_h + 40.0:
+		menu_h = root_size.y - 40.0
+	if menu_w < 320.0:
+		menu_w = 320.0
+	if menu_h < 360.0:
+		menu_h = 360.0
+	menu_panel.size = Vector2(menu_w, menu_h)
+	menu_panel.position = Vector2((root_size.x - menu_w) / 2.0, (root_size.y - menu_h) / 2.0)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not game_started:
@@ -123,6 +188,7 @@ func show_menu() -> void:
 	hint.visible = false
 	reset_button.visible = false
 	_clear_tower()
+	_fit_fixed_layout()
 
 func _on_start_pressed() -> void:
 	var selected_cells: int = cells_option.get_selected_id()
@@ -142,10 +208,12 @@ func start_game() -> void:
 	level_up_button.visible = true
 	hint.visible = true
 	reset_button.visible = true
+	_fit_fixed_layout()
 	_reset_state()
 	_build_surfaces()
 	roll_choices()
 	render_world()
+	_scroll_to_active_content()
 	hint.text = "Выбери постройку. Карточки уже отфильтрованы: они влезают в свободные клетки текущего уровня."
 
 func _reset_state() -> void:
@@ -226,7 +294,8 @@ func _on_slot_pressed(surface_index: int, cell_index: int) -> void:
 	selected_choice_index = -1
 	roll_choices()
 	render_world()
-	hint.text = "Постройка заняла свою форму. Высокие клетки блокируют уровни выше до Level Up."
+	_scroll_to_active_content()
+	hint.text = "Постройка заняла свою форму. Башня автоматически прокручена к активной высоте."
 
 func _apply_building_stats(definition: Dictionary) -> void:
 	var footprint: Array = definition["footprint"]
@@ -258,10 +327,10 @@ func _on_level_up_pressed() -> void:
 	unlocked_level += 1
 	selected_building = {}
 	selected_choice_index = -1
-	scroll_offset = 99999.0
 	roll_choices()
 	render_world()
-	hint.text = "Открыт уровень %d. Клетки, занятые высокими или L-образными домами, недоступны." % unlocked_level
+	_scroll_to_active_content()
+	hint.text = "Открыт уровень %d. Камера поднята к новому уровню." % unlocked_level
 
 func _can_level_up() -> bool:
 	if _occupied_cells_on_level(unlocked_level) <= 0:
@@ -319,20 +388,11 @@ func _make_choice(building_type: Dictionary, shape: Dictionary) -> Dictionary:
 	for index: int in range(raw_cells.size()):
 		footprint.append(raw_cells[index] as Vector2i)
 	return {
-		"id": str(building_type["id"]),
-		"title": str(building_type["title"]),
-		"glyph": str(building_type["glyph"]),
-		"color": building_type["color"] as Color,
-		"residents": int(building_type["residents"]),
-		"energy": int(building_type["energy"]),
-		"beauty": int(building_type["beauty"]),
-		"tech": int(building_type["tech"]),
-		"comfort": int(building_type["comfort"]),
-		"shape_id": str(shape["id"]),
-		"shape_title": str(shape["title"]),
-		"footprint": footprint,
-		"shape_w": _footprint_width(footprint),
-		"shape_h": _footprint_height(footprint)
+		"id": str(building_type["id"]), "title": str(building_type["title"]), "glyph": str(building_type["glyph"]),
+		"color": building_type["color"] as Color, "residents": int(building_type["residents"]), "energy": int(building_type["energy"]),
+		"beauty": int(building_type["beauty"]), "tech": int(building_type["tech"]), "comfort": int(building_type["comfort"]),
+		"shape_id": str(shape["id"]), "shape_title": str(shape["title"]), "footprint": footprint,
+		"shape_w": _footprint_width(footprint), "shape_h": _footprint_height(footprint)
 	}
 
 func _is_building_type_unlocked(item: Dictionary) -> bool:
@@ -403,10 +463,7 @@ func _refresh_choice_buttons() -> void:
 			var item: Dictionary = current_choices[index]
 			button.disabled = false
 			button.text = "%s\n%s %dx%d\n%s" % [str(item["glyph"]), str(item["title"]), int(item["shape_w"]), int(item["shape_h"]), str(item["shape_title"])]
-			if index == selected_choice_index:
-				button.modulate = Color(1.0, 0.95, 0.55, 1.0)
-			else:
-				button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			button.modulate = Color(1.0, 0.95, 0.55, 1.0) if index == selected_choice_index else Color(1.0, 1.0, 1.0, 1.0)
 		else:
 			button.disabled = true
 			button.text = "Нет подходящего\nдомика"
@@ -477,10 +534,7 @@ func _draw_current_level_slots() -> void:
 			slot_button.position = pos
 			slot_button.size = Vector2(CELL_W - 8.0, CELL_H - 8.0)
 			slot_button.text = "L%d\nslot" % unlocked_level
-			if selected_building.is_empty():
-				slot_button.modulate = Color(0.95, 0.84, 0.32, 0.85)
-			else:
-				slot_button.modulate = Color(0.55, 0.95, 0.62, 1.0)
+			slot_button.modulate = Color(0.95, 0.84, 0.32, 0.85) if selected_building.is_empty() else Color(0.55, 0.95, 0.62, 1.0)
 			slot_button.pressed.connect(_on_slot_pressed.bind(surface_index, cell))
 			tower.add_child(slot_button)
 
@@ -568,6 +622,10 @@ func _terrain_title() -> String:
 
 func _scroll_by(delta: float) -> void:
 	scroll_offset += delta
+	_apply_scroll_limits()
+
+func _scroll_to_active_content() -> void:
+	scroll_offset = _max_scroll_offset()
 	_apply_scroll_limits()
 
 func _apply_scroll_limits() -> void:
