@@ -6,9 +6,11 @@
   "description": "Engine-agnostic prototype scaffold for Artbuild.",
   "scripts": {
     "start": "node src/app/main.js",
+    "prototype:loop": "node src/tools/prototypes/playable-loop.js 10",
     "smoke": "node test/smoke-test.js",
-    "test": "node test/smoke-test.js && node test/building-definitions.test.js && node test/placement.test.js",
+    "test": "node test/smoke-test.js && node test/building-definitions.test.js && node test/placement.test.js && node test/playable-loop.test.js",
     "test:placement": "node test/placement.test.js",
+    "test:playable-loop": "node test/playable-loop.test.js",
     "validate:content": "node test/building-definitions.test.js"
   },
   "engines": {

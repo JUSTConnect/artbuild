@@ -1,7 +1,15 @@
+export {
+  renderAvailableSlotsText,
+  renderPrototypeRun,
+  renderPrototypeSnapshot,
+  renderTowerText
+} from "./tower-view/text-tower-view.js";
+
 export const presentationModules = Object.freeze([
   Object.freeze({
     name: "presentation/tower-view",
-    responsibility: "Renders tower state and placement feedback without owning game rules."
+    responsibility: "Renders tower state and placement feedback without owning game rules.",
+    exports: ["renderTowerText", "renderAvailableSlotsText", "renderPrototypeRun"]
   }),
   Object.freeze({
     name: "presentation/ui",

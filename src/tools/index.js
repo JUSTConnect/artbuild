@@ -10,6 +10,7 @@ export const toolModules = Object.freeze([
   }),
   Object.freeze({
     name: "tools/prototypes",
-    responsibility: "Hosts development-only sandboxes and debug helpers."
+    responsibility: "Hosts development-only sandboxes and debug helpers.",
+    prototypes: ["playable-loop"]
   })
 ]);
