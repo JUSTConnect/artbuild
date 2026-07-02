@@ -36,12 +36,13 @@ npm run smoke
 npm run validate:content
 npm run test:placement
 npm run test:playable-loop
+npm run test:choice
 npm run prototype:loop
 npm test
 npm start
 ```
 
-`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков. `npm run test:placement` проверяет доменную логику слотов и размещения. `npm run prototype:loop` запускает первый текстовый construction loop.
+`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков. `npm run test:placement` проверяет доменную логику слотов и размещения. `npm run test:choice` проверяет выбор из трёх вариантов. `npm run prototype:loop` запускает первый текстовый construction loop.
 
 ## Документация
 
@@ -51,6 +52,7 @@ npm start
 - [Building System](docs/building-system.md) — система домиков, блоков, размещения и стыковки.
 - [Progression and Balance](docs/progression-and-balance.md) — жители, энергия, красота, технология, прогрессия и ограничения роста.
 - [Architecture](docs/architecture.md) — предлагаемая расширяемая архитектура проекта без монолита.
+- [Choice Service](docs/choice-service.md) — сервис выбора из трёх вариантов и debug-карточки выбора.
 - [Content Format](docs/content-format.md) — формат BuildingDefinition, первый каталог и правила валидации.
 - [Development Structure](docs/development-structure.md) — текущий модульный каркас, границы слоёв и команды запуска.
 - [Domain Placement](docs/domain-placement.md) — TowerState, PlacementSlot, PlacedBuilding и первый placement flow.

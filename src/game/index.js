@@ -1,5 +1,6 @@
 export { createGameSession, selectBuilding, updateSessionTower } from "./session/game-session.js";
 export { buildSelectedBuilding, getFirstValidTopSlot, selectAndBuild } from "./services/build-command-service.js";
+export { compareChoiceCards, createChoiceCard, getChoiceOptions, requireChoiceOption } from "./services/choice-service.js";
 export { getPrototypeBuildOptions, runPrototypeBuildLoop } from "./services/prototype-loop.js";
 
 export const gameModules = Object.freeze([
@@ -10,7 +11,15 @@ export const gameModules = Object.freeze([
   Object.freeze({
     name: "game/services",
     responsibility: "Coordinates application services such as build, choice, progression and session flow.",
-    exports: ["buildSelectedBuilding", "selectAndBuild", "getPrototypeBuildOptions", "runPrototypeBuildLoop"]
+    exports: [
+      "buildSelectedBuilding",
+      "selectAndBuild",
+      "getChoiceOptions",
+      "createChoiceCard",
+      "requireChoiceOption",
+      "getPrototypeBuildOptions",
+      "runPrototypeBuildLoop"
+    ]
   }),
   Object.freeze({
     name: "game/session",
