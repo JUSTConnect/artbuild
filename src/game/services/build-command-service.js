@@ -1,6 +1,7 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
+import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
 export function getFirstValidTopSlot(tower, buildingDefinition) {
@@ -33,7 +34,7 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
   const placedTower = placeBuilding(session.tower, buildingDefinition, targetSlotId, {
     instanceId: instanceId ?? `${buildingDefinition.id}:turn-${session.turn + 1}`
   });
-  const nextTower = recalculateEnergyState(placedTower);
+  const nextTower = recalculateResidentsState(recalculateEnergyState(placedTower));
 
   return updateSessionTower(
     session,
@@ -45,7 +46,11 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
       turn: session.turn + 1,
       energyProduced: nextTower.energyProduced,
       energyRequired: nextTower.energyRequired,
-      unpoweredCount: nextTower.unpoweredCount
+      unpoweredCount: nextTower.unpoweredCount,
+      population: nextTower.population,
+      capacity: nextTower.capacity,
+      comfort: nextTower.comfort,
+      isComfortable: nextTower.isComfortable
     })
   );
 }
