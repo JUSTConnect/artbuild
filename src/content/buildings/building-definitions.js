@@ -134,13 +134,13 @@ export const buildingDefinitions = Object.freeze([
     name: "Wooden Bridge",
     category: "Decor",
     size: { w: 2, h: 1 },
-    allowedConnections: ["SideLeft", "SideRight", "Bridge"],
+    allowedConnections: ["Bridge"],
     functionOptions: ["Decor"],
     baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 1, technology: 0, comfort: 1 },
     unlockRequirements: { minTechnology: 2 },
     visualPrefabId: "placeholder/decor/wooden_bridge_01",
     rarity: "Common",
-    placementRules: { requiresSideAnchor: true, createsSlots: ["Bridge", "Top"] }
+    placementRules: { requiresBridgeAnchor: true, createsSlots: ["Bridge", "Top"] }
   }),
   Object.freeze({
     id: "roof_garden_01",
