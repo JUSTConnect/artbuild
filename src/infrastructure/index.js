@@ -1,3 +1,12 @@
+export {
+  createReplayTimeline,
+  createSharePayload,
+  findReplaySlotId,
+  replayFormatVersion,
+  restoreTowerFromSharePayload,
+  serializeSharePayload
+} from "./sharing/replay-pipeline.js";
+
 export const infrastructureModules = Object.freeze([
   Object.freeze({
     name: "infrastructure/save",
@@ -9,6 +18,13 @@ export const infrastructureModules = Object.freeze([
   }),
   Object.freeze({
     name: "infrastructure/sharing",
-    responsibility: "Integrates replay and future platform share/export flows."
+    responsibility: "Integrates replay and future platform share/export flows.",
+    exports: [
+      "createReplayTimeline",
+      "createSharePayload",
+      "serializeSharePayload",
+      "restoreTowerFromSharePayload",
+      "findReplaySlotId"
+    ]
   })
 ]);
