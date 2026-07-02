@@ -1,6 +1,7 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
+import { recalculateProgressionState } from "../../domain/progression/index.js";
 import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
@@ -34,7 +35,9 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
   const placedTower = placeBuilding(session.tower, buildingDefinition, targetSlotId, {
     instanceId: instanceId ?? `${buildingDefinition.id}:turn-${session.turn + 1}`
   });
-  const nextTower = recalculateResidentsState(recalculateEnergyState(placedTower));
+  const nextTower = recalculateProgressionState(
+    recalculateResidentsState(recalculateEnergyState(placedTower))
+  );
 
   return updateSessionTower(
     session,
@@ -50,7 +53,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
       population: nextTower.population,
       capacity: nextTower.capacity,
       comfort: nextTower.comfort,
-      isComfortable: nextTower.isComfortable
+      isComfortable: nextTower.isComfortable,
+      beauty: nextTower.beauty,
+      technology: nextTower.technology,
+      unlockedBuildingIds: nextTower.unlockedBuildingIds
     })
   );
 }
