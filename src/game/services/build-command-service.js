@@ -1,4 +1,5 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
+import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
@@ -29,9 +30,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
     throw new Error(`No valid slot for building: ${buildingDefinition.id}`);
   }
 
-  const nextTower = placeBuilding(session.tower, buildingDefinition, targetSlotId, {
+  const placedTower = placeBuilding(session.tower, buildingDefinition, targetSlotId, {
     instanceId: instanceId ?? `${buildingDefinition.id}:turn-${session.turn + 1}`
   });
+  const nextTower = recalculateEnergyState(placedTower);
 
   return updateSessionTower(
     session,
@@ -40,7 +42,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
       type: "build_completed",
       buildingId: buildingDefinition.id,
       slotId: targetSlotId,
-      turn: session.turn + 1
+      turn: session.turn + 1,
+      energyProduced: nextTower.energyProduced,
+      energyRequired: nextTower.energyRequired,
+      unpoweredCount: nextTower.unpoweredCount
     })
   );
 }

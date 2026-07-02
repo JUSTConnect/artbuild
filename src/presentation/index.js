@@ -4,6 +4,7 @@ export {
   renderPrototypeSnapshot,
   renderTowerText
 } from "./tower-view/text-tower-view.js";
+export { getEnergyFeedback, renderEnergyFeedbackText } from "./animation/energy-feedback.js";
 export { renderChoiceCardsText, renderChoiceCardText } from "./ui/choice-cards.js";
 
 export const presentationModules = Object.freeze([
@@ -19,6 +20,7 @@ export const presentationModules = Object.freeze([
   }),
   Object.freeze({
     name: "presentation/animation",
-    responsibility: "Owns visual transitions such as building pop-in, window light and camera movement."
+    responsibility: "Owns visual transitions such as building pop-in, window light and camera movement.",
+    exports: ["getEnergyFeedback", "renderEnergyFeedbackText"]
   })
 ]);
