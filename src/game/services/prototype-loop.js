@@ -1,13 +1,10 @@
-import { buildingDefinitions } from "../../content/buildings/index.js";
-import { canPlaceBuilding } from "../../domain/placement/index.js";
+import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { createGameSession } from "../session/game-session.js";
 import { selectAndBuild } from "./build-command-service.js";
+import { getChoiceOptions } from "./choice-service.js";
 
 export function getPrototypeBuildOptions(tower, { limit = 3 } = {}) {
-  return buildingDefinitions
-    .filter((definition) => !definition.placementRules.startOnly)
-    .filter((definition) => tower.availableSlots.some((slot) => canPlaceBuilding(tower, definition, slot.id).ok))
-    .slice(0, limit);
+  return getChoiceOptions(tower, { limit });
 }
 
 export function runPrototypeBuildLoop({ steps = 10, session = createGameSession() } = {}) {
@@ -22,13 +19,15 @@ export function runPrototypeBuildLoop({ steps = 10, session = createGameSession(
       break;
     }
 
-    const selected = options[step % options.length];
-    currentSession = selectAndBuild(currentSession, selected.id);
+    const selectedCard = options[step % options.length];
+    const selectedDefinition = getBuildingDefinitionById(selectedCard.id);
+    currentSession = selectAndBuild(currentSession, selectedCard.id);
 
     snapshots.push(Object.freeze({
       step,
       options,
-      selected,
+      selected: selectedDefinition,
+      selectedCard,
       skipped: false,
       session: currentSession
     }));
