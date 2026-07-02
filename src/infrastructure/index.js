@@ -1,4 +1,11 @@
 export {
+  createSaveSnapshot,
+  createSaveSummary,
+  restoreSessionFromSaveSnapshot,
+  saveFormatVersion,
+  serializeSaveSnapshot
+} from "./save/save-snapshot.js";
+export {
   createReplayTimeline,
   createSharePayload,
   findReplaySlotId,
@@ -10,7 +17,13 @@ export {
 export const infrastructureModules = Object.freeze([
   Object.freeze({
     name: "infrastructure/save",
-    responsibility: "Persists and restores tower/session state."
+    responsibility: "Persists and restores tower/session state.",
+    exports: [
+      "createSaveSnapshot",
+      "serializeSaveSnapshot",
+      "restoreSessionFromSaveSnapshot",
+      "createSaveSummary"
+    ]
   }),
   Object.freeze({
     name: "infrastructure/assets",
