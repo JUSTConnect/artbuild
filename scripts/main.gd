@@ -26,10 +26,26 @@ const SHAPES: Array[Dictionary] = [
 	{"id":"1x3", "title":"1 wide / 3 high", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)]},
 	{"id":"2x1", "title":"2 wide / 1 high", "cells":[Vector2i(0, 0), Vector2i(1, 0)]},
 	{"id":"2x2", "title":"2x2", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]},
+	{"id":"2x3", "title":"2 wide / 3 high", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)]},
 	{"id":"3x1", "title":"3 wide / 1 high", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]},
 	{"id":"3x2", "title":"3 wide / 2 high", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]},
-	{"id":"L2", "title":"L shape", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1)]},
-	{"id":"L3", "title":"Tall L shape", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(1, 0)]}
+	{"id":"3x3", "title":"3x3", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)]},
+	{"id":"L2_left", "title":"L 2x2 left", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0)]},
+	{"id":"L2_right", "title":"L 2x2 right", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1)]},
+	{"id":"L2_top", "title":"L 2x2 upper", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1)]},
+	{"id":"L3_tall_left", "title":"Tall L left", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(1, 0)]},
+	{"id":"L3_tall_right", "title":"Tall L right", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1), Vector2i(1, 2)]},
+	{"id":"L3_tall_top", "title":"Tall L upper", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(1, 2)]},
+	{"id":"L3_flat_left", "title":"Flat L left", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1)]},
+	{"id":"L3_flat_right", "title":"Flat L right", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(2, 1)]},
+	{"id":"L3_flat_upper", "title":"Flat L upper", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]},
+	{"id":"L3_flat_upper_mirror", "title":"Flat L upper mirror", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1)]},
+	{"id":"corner_3_left", "title":"3x3 corner left", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(1, 0), Vector2i(2, 0)]},
+	{"id":"corner_3_right", "title":"3x3 corner right", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 2)]},
+	{"id":"corner_3_top", "title":"3x3 corner upper", "cells":[Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)]},
+	{"id":"T3", "title":"T shape", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1)]},
+	{"id":"T3_tall", "title":"Tall T shape", "cells":[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]},
+	{"id":"U3", "title":"U shape", "cells":[Vector2i(0, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]}
 ]
 
 @onready var menu_panel: Control = $MenuPanel
