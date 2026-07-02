@@ -1,6 +1,6 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
-import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
+import { canPlaceBuilding, getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
 import {
   getProgressionMetrics,
   isBuildingUnlocked,
@@ -10,13 +10,16 @@ import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
 export function getFirstValidTopSlot(tower, buildingDefinition) {
-  return getAvailableSlots(tower, "Top").find((slot) => {
-    if (slot.isOccupied) return false;
-    if (!buildingDefinition.allowedConnections.includes(slot.connectionType)) return false;
-    if (buildingDefinition.size.w > slot.supportedSize.w) return false;
-    if (buildingDefinition.size.h > slot.supportedSize.h) return false;
-    return true;
-  }) ?? null;
+  return getAvailableSlots(tower, "Top").find((slot) => isValidSlot(tower, buildingDefinition, slot)) ?? null;
+}
+
+export function getFirstValidSlot(tower, buildingDefinition) {
+  return getAvailableSlots(tower).find((slot) => isValidSlot(tower, buildingDefinition, slot)) ?? null;
+}
+
+function isValidSlot(tower, buildingDefinition, slot) {
+  if (slot.isOccupied) return false;
+  return canPlaceBuilding(tower, buildingDefinition, slot.id).ok;
 }
 
 export function buildSelectedBuilding(session, { slotId = null, instanceId = null } = {}) {
@@ -34,7 +37,7 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
     throw new Error(`Building is locked: ${buildingDefinition.id}`);
   }
 
-  const targetSlotId = slotId ?? getFirstValidTopSlot(session.tower, buildingDefinition)?.id;
+  const targetSlotId = slotId ?? getFirstValidSlot(session.tower, buildingDefinition)?.id;
 
   if (!targetSlotId) {
     throw new Error(`No valid slot for building: ${buildingDefinition.id}`);
