@@ -2,17 +2,25 @@ extends Node
 
 const ZOOM_AMOUNT: float = 0.1
 
-@onready var game_root: Node = get_parent()
-@onready var tower_area: Control = game_root.get_node("TowerArea") as Control
-
+var game_root: Node = null
+var tower_area: Control = null
 var mouse_dragging: bool = false
 var last_mouse_pos: Vector2 = Vector2.ZERO
 var active_points: Dictionary = {}
 var scale_start_distance: float = 0.0
 var scale_start_zoom: float = 1.0
 
+func _ready() -> void:
+	call_deferred("_bind_scene")
+
+func _bind_scene() -> void:
+	game_root = get_tree().current_scene
+	if game_root == null:
+		return
+	tower_area = game_root.get_node_or_null("TowerArea") as Control
+
 func _unhandled_input(event: InputEvent) -> void:
-	if not _is_game_started():
+	if not _is_ready_for_input():
 		return
 	if event is InputEventMouseButton:
 		_handle_mouse_button(event)
@@ -23,7 +31,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventScreenDrag:
 		_handle_screen_drag(event)
 
-func _is_game_started() -> bool:
+func _is_ready_for_input() -> bool:
+	if game_root == null or tower_area == null:
+		_bind_scene()
+	if game_root == null or tower_area == null:
+		return false
 	return game_root.get("game_started") == true
 
 func _handle_mouse_button(event: InputEventMouseButton) -> void:
