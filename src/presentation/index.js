@@ -4,6 +4,7 @@ export {
   renderPrototypeSnapshot,
   renderTowerText
 } from "./tower-view/text-tower-view.js";
+export { renderChoiceCardsText, renderChoiceCardText } from "./ui/choice-cards.js";
 
 export const presentationModules = Object.freeze([
   Object.freeze({
@@ -13,7 +14,8 @@ export const presentationModules = Object.freeze([
   }),
   Object.freeze({
     name: "presentation/ui",
-    responsibility: "Renders selection cards, stats and player-facing prompts."
+    responsibility: "Renders selection cards, stats and player-facing prompts.",
+    exports: ["renderChoiceCardsText", "renderChoiceCardText"]
   }),
   Object.freeze({
     name: "presentation/animation",
