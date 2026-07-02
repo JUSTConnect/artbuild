@@ -6,7 +6,6 @@ import { createTowerState } from "../src/domain/tower/index.js";
 import { createGameSession, getFirstValidSlot, selectAndBuild } from "../src/game/index.js";
 
 const islandFoundation = getBuildingDefinitionById("foundation_island_01");
-const reefFoundation = getBuildingDefinitionById("foundation_reef_01");
 const residential = getBuildingDefinitionById("residential_small_01");
 const balcony = getBuildingDefinitionById("decor_balcony_01");
 const bridge = getBuildingDefinitionById("wooden_bridge_01");
@@ -24,7 +23,7 @@ assert.ok(getAvailableSlots(tower, "SideLeft").length >= 1);
 assert.ok(getAvailableSlots(tower, "SideRight").length >= 1);
 assert.ok(getAvailableSlots(tower, "Bridge").length >= 1);
 
-const sideSlot = getAvailableSlots(tower, "SideRight")[0];
+const sideSlot = getAvailableSlots(tower, "SideLeft")[0];
 assert.equal(canPlaceBuilding(tower, balcony, sideSlot.id).ok, true);
 tower = placeBuilding(tower, balcony, sideSlot.id, { instanceId: "side-balcony" });
 assert.ok(getAvailableSlots(tower, "Decor").length >= 1);
@@ -48,7 +47,7 @@ session = selectAndBuild(session, "library_small_01", { instanceId: "flow-librar
 
 assert.ok(session.tower.unlockedBuildingIds.includes("wooden_bridge_01"));
 assert.ok(session.tower.unlockedBuildingIds.includes("floating_foundation_01"));
-assert.equal(getFirstValidSlot(session.tower, bridge).connectionType, "SideLeft");
+assert.equal(getFirstValidSlot(session.tower, bridge).connectionType, "Bridge");
 session = selectAndBuild(session, "wooden_bridge_01", { instanceId: "flow-bridge" });
 assert.equal(session.tower.placedBlocks.at(-1).definitionId, "wooden_bridge_01");
 assert.ok(getAvailableSlots(session.tower, "Bridge").length >= 1);
