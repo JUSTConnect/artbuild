@@ -37,11 +37,35 @@ This repository contains a playable Godot 4 prototype scaffold.
 - Школа
 - Лавка
 
+## Footprints and shapes
+
+Building cards are generated as a combination of building type and shape.
+
+Current shapes include:
+
+- 1x1;
+- 1 wide / 2 high;
+- 1 wide / 3 high;
+- 2 wide / 1 high;
+- 2x2;
+- 3 wide / 1 high;
+- 3 wide / 2 high;
+- L shape;
+- Tall L shape.
+
+A tall building occupies cells on future levels. For example, a 1x3 building placed on level 1 blocks the same column on levels 1, 2 and 3. You can only build above it after unlocking a high enough level.
+
+An L-shaped building only blocks the cells that belong to its actual shape. This means the open part above the shorter side can be used earlier, while the tall side stays blocked until higher levels are unlocked.
+
 ## Current rules
 
-- You can only build on the currently unlocked level.
+- You can only place the anchor of a new building on the currently unlocked level.
+- The building footprint may occupy cells above the current level.
+- Cards are filtered before they appear: if only one free cell remains, wider buildings are not offered.
+- A card is offered only if it has at least one valid anchor cell on the current level.
 - Empty cells on the active level are highlighted.
-- Level Up depends on beauty, technology, residents and at least one block on the current level.
+- After choosing a card, only valid anchor cells for that exact shape stay highlighted.
+- Level Up depends on beauty, technology, residents and occupied cells on the current level.
 - Scroll is limited so the camera cannot move above the built/unlocked tower height.
 
 ## What is included
@@ -55,7 +79,7 @@ This repository contains a playable Godot 4 prototype scaffold.
 
 The full engine-agnostic gameplay prototype still lives in JavaScript modules under `src/`.
 
-The Godot scene now has a simplified playable loop that mirrors the core idea: terrain setup, level-based placement, stats, choices and level up.
+The Godot scene now has a simplified playable loop that mirrors the core idea: terrain setup, footprint-based level placement, stats, choices and level up.
 
 ## Suggested next porting order
 
