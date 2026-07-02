@@ -34,11 +34,12 @@
 ```bash
 npm run smoke
 npm run validate:content
+npm run test:placement
 npm test
 npm start
 ```
 
-`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков.
+`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков. `npm run test:placement` проверяет доменную логику слотов и размещения.
 
 ## Документация
 
@@ -50,6 +51,7 @@ npm start
 - [Architecture](docs/architecture.md) — предлагаемая расширяемая архитектура проекта без монолита.
 - [Content Format](docs/content-format.md) — формат BuildingDefinition, первый каталог и правила валидации.
 - [Development Structure](docs/development-structure.md) — текущий модульный каркас, границы слоёв и команды запуска.
+- [Domain Placement](docs/domain-placement.md) — TowerState, PlacementSlot, PlacedBuilding и первый placement flow.
 - [Visual Style](docs/visual-style.md) — визуальный стиль, башни, домики, органический рост и share-видео.
 - [Roadmap](docs/roadmap.md) — этапы разработки от простого прототипа до полноценной мобильной игры.
 
