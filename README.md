@@ -38,12 +38,13 @@ npm run test:placement
 npm run test:playable-loop
 npm run test:choice
 npm run test:energy
+npm run test:residents
 npm run prototype:loop
 npm test
 npm start
 ```
 
-`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков. `npm run test:placement` проверяет доменную логику слотов и размещения. `npm run test:choice` проверяет выбор из трёх вариантов. `npm run test:energy` проверяет powered/unpowered состояние. `npm run prototype:loop` запускает первый текстовый construction loop.
+`npm run smoke` проверяет, что приложение импортируется и что базовые слои проекта зарегистрированы. `npm run validate:content` проверяет первый каталог домиков. `npm run test:placement` проверяет доменную логику слотов и размещения. `npm run test:choice` проверяет выбор из трёх вариантов. `npm run test:energy` проверяет powered/unpowered состояние. `npm run test:residents` проверяет жителей и комфорт. `npm run prototype:loop` запускает первый текстовый construction loop.
 
 ## Документация
 
@@ -59,6 +60,7 @@ npm start
 - [Domain Placement](docs/domain-placement.md) — TowerState, PlacementSlot, PlacedBuilding и первый placement flow.
 - [Energy System](docs/energy-system.md) — энергия, радиус источников, powered/unpowered state и feedback окон.
 - [Playable Loop](docs/playable-loop.md) — первый запускаемый construction loop и текстовый tower view.
+- [Residents and Comfort](docs/residents-and-comfort.md) — жители, capacity, заселение и comfort mood.
 - [Visual Style](docs/visual-style.md) — визуальный стиль, башни, домики, органический рост и share-видео.
 - [Roadmap](docs/roadmap.md) — этапы разработки от простого прототипа до полноценной мобильной игры.
 
