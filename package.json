@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node src/app/main.js",
     "smoke": "node test/smoke-test.js",
-    "test": "node test/smoke-test.js && node test/building-definitions.test.js",
+    "test": "node test/smoke-test.js && node test/building-definitions.test.js && node test/placement.test.js",
+    "test:placement": "node test/placement.test.js",
     "validate:content": "node test/building-definitions.test.js"
   },
   "engines": {
