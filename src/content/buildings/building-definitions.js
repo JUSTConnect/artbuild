@@ -59,7 +59,7 @@ export const buildingDefinitions = Object.freeze([
     allowedConnections: ["Top"],
     functionOptions: ["Technology"],
     baseStats: { housing: 0, energyProduced: 0, energyRequired: 2, beauty: 0, technology: 3, comfort: 0 },
-    unlockRequirements: { initiallyUnlocked: true },
+    unlockRequirements: { minTechnology: 2 },
     visualPrefabId: "placeholder/buildings/workshop_small_01",
     rarity: "Common",
     placementRules: { requiresSupport: true, createsSlots: ["Top", "Utility"] }
@@ -72,7 +72,7 @@ export const buildingDefinitions = Object.freeze([
     allowedConnections: ["Top"],
     functionOptions: ["Art"],
     baseStats: { housing: 0, energyProduced: 0, energyRequired: 1, beauty: 4, technology: 0, comfort: 1 },
-    unlockRequirements: { initiallyUnlocked: true },
+    unlockRequirements: { minBeauty: 5 },
     visualPrefabId: "placeholder/buildings/art_studio_small_01",
     rarity: "Uncommon",
     placementRules: { requiresSupport: true, createsSlots: ["Top", "Decor"] }
@@ -98,7 +98,7 @@ export const buildingDefinitions = Object.freeze([
     allowedConnections: ["SideLeft", "SideRight", "Decor"],
     functionOptions: ["Decor"],
     baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 2, technology: 0, comfort: 1 },
-    unlockRequirements: { initiallyUnlocked: true },
+    unlockRequirements: { minBeauty: 4 },
     visualPrefabId: "placeholder/decor/balcony_01",
     rarity: "Common",
     placementRules: { requiresSideAnchor: true, createsSlots: [] }
@@ -111,7 +111,7 @@ export const buildingDefinitions = Object.freeze([
     allowedConnections: ["Roof", "Top"],
     functionOptions: ["Decor", "Recreation"],
     baseStats: { housing: 0, energyProduced: 0, energyRequired: 0, beauty: 3, technology: 0, comfort: 2 },
-    unlockRequirements: { initiallyUnlocked: true },
+    unlockRequirements: { minBeauty: 6, minPopulation: 2 },
     visualPrefabId: "placeholder/decor/roof_garden_01",
     rarity: "Uncommon",
     placementRules: { requiresSupport: true, prefersTopLevel: true, createsSlots: [] }

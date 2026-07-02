@@ -1,6 +1,11 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
 import { getAvailableSlots, placeBuilding } from "../../domain/placement/index.js";
+import {
+  getProgressionMetrics,
+  isBuildingUnlocked,
+  recalculateProgressionState
+} from "../../domain/progression/index.js";
 import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { selectBuilding, updateSessionTower } from "../session/game-session.js";
 
@@ -25,6 +30,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
     throw new Error(`Unknown building definition: ${session.selectedBuildingId}`);
   }
 
+  if (!isBuildingUnlocked(buildingDefinition, getProgressionMetrics(session.tower))) {
+    throw new Error(`Building is locked: ${buildingDefinition.id}`);
+  }
+
   const targetSlotId = slotId ?? getFirstValidTopSlot(session.tower, buildingDefinition)?.id;
 
   if (!targetSlotId) {
@@ -34,7 +43,9 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
   const placedTower = placeBuilding(session.tower, buildingDefinition, targetSlotId, {
     instanceId: instanceId ?? `${buildingDefinition.id}:turn-${session.turn + 1}`
   });
-  const nextTower = recalculateResidentsState(recalculateEnergyState(placedTower));
+  const nextTower = recalculateProgressionState(
+    recalculateResidentsState(recalculateEnergyState(placedTower))
+  );
 
   return updateSessionTower(
     session,
@@ -50,7 +61,10 @@ export function buildSelectedBuilding(session, { slotId = null, instanceId = nul
       population: nextTower.population,
       capacity: nextTower.capacity,
       comfort: nextTower.comfort,
-      isComfortable: nextTower.isComfortable
+      isComfortable: nextTower.isComfortable,
+      beauty: nextTower.beauty,
+      technology: nextTower.technology,
+      unlockedBuildingIds: nextTower.unlockedBuildingIds
     })
   );
 }

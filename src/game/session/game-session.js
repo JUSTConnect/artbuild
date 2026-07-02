@@ -1,5 +1,6 @@
 import { getBuildingDefinitionById } from "../../content/buildings/index.js";
 import { recalculateEnergyState } from "../../domain/energy/index.js";
+import { recalculateProgressionState } from "../../domain/progression/index.js";
 import { recalculateResidentsState } from "../../domain/residents/index.js";
 import { createTowerState } from "../../domain/tower/index.js";
 
@@ -14,8 +15,10 @@ export function createGameSession({
     throw new Error(`Unknown foundation definition: ${foundationId}`);
   }
 
-  const tower = recalculateResidentsState(
-    recalculateEnergyState(createTowerState({ id: towerId, foundationDefinition }))
+  const tower = recalculateProgressionState(
+    recalculateResidentsState(
+      recalculateEnergyState(createTowerState({ id: towerId, foundationDefinition }))
+    )
   );
 
   return Object.freeze({
