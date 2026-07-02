@@ -1,5 +1,6 @@
 import { buildingDefinitions } from "../../content/buildings/index.js";
 import { canPlaceBuilding } from "../../domain/placement/index.js";
+import { getProgressionMetrics, isBuildingUnlocked } from "../../domain/progression/index.js";
 
 const defaultCategoryWeights = Object.freeze({
   Residential: 100,
@@ -26,8 +27,10 @@ export function createChoiceCard(definition, tower) {
     visualPrefabId: definition.visualPrefabId,
     functionOptions: Object.freeze([...definition.functionOptions]),
     baseStats: Object.freeze({ ...definition.baseStats }),
+    unlockRequirements: Object.freeze({ ...(definition.unlockRequirements ?? {}) }),
     validSlotIds: Object.freeze(validSlotIds),
-    isPlayable: validSlotIds.length > 0
+    isPlayable: validSlotIds.length > 0,
+    isUnlocked: isBuildingUnlocked(definition, getProgressionMetrics(tower))
   });
 }
 
@@ -39,6 +42,7 @@ export function getChoiceOptions(tower, {
   return catalog
     .filter((definition) => !definition.placementRules.startOnly)
     .map((definition) => createChoiceCard(definition, tower))
+    .filter((card) => card.isUnlocked)
     .filter((card) => card.isPlayable)
     .sort((a, b) => compareChoiceCards(a, b, categoryWeights))
     .slice(0, limit);
