@@ -24,51 +24,135 @@ color = Color(0.08, 0.09, 0.11, 1)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 28.0
-offset_bottom = 76.0
+offset_top = 24.0
+offset_bottom = 68.0
 grow_horizontal = 2
 text = "Artbuild"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Stats" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -360.0
-offset_top = 92.0
-offset_right = -32.0
-offset_bottom = 292.0
-grow_horizontal = 0
-text = "Stats"
-horizontal_alignment = 0
-vertical_alignment = 0
-autowrap_mode = 3
-
-[node name="TowerArea" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 60.0
-offset_top = 100.0
-offset_right = -60.0
-offset_bottom = -260.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Tower" type="Control" parent="TowerArea"]
+[node name="MenuPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -360.0
-offset_right = 240.0
-offset_bottom = 360.0
+offset_left = -310.0
+offset_top = -250.0
+offset_right = 310.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuTitle" type="Label" parent="MenuPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 32.0
+offset_bottom = 82.0
+grow_horizontal = 2
+text = "Start Tower"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CellsLabel" type="Label" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 72.0
+offset_top = 118.0
+offset_right = 300.0
+offset_bottom = 154.0
+text = "Cells per level"
+vertical_alignment = 1
+
+[node name="CellsOption" type="OptionButton" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 330.0
+offset_top = 112.0
+offset_right = 548.0
+offset_bottom = 160.0
+
+[node name="TerrainLabel" type="Label" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 72.0
+offset_top = 190.0
+offset_right = 300.0
+offset_bottom = 226.0
+text = "Terrain"
+vertical_alignment = 1
+
+[node name="TerrainOption" type="OptionButton" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 330.0
+offset_top = 184.0
+offset_right = 548.0
+offset_bottom = 232.0
+
+[node name="MenuInfo" type="Label" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 72.0
+offset_top = 274.0
+offset_right = 548.0
+offset_bottom = 348.0
+text = "Choose how wide each build level is and what kind of ground the tower starts on."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StartButton" type="Button" parent="MenuPanel"]
+layout_mode = 1
+offset_left = 190.0
+offset_top = 388.0
+offset_right = 430.0
+offset_bottom = 452.0
+text = "Start Building"
+
+[node name="Stats" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 86.0
+offset_right = -32.0
+offset_bottom = 342.0
+grow_horizontal = 0
+text = "Stats"
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+
+[node name="LevelInfo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 32.0
+offset_top = 72.0
+offset_right = -400.0
+offset_bottom = 118.0
+grow_horizontal = 2
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TowerArea" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 124.0
+offset_right = -36.0
+offset_bottom = -246.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tower" type="Control" parent="TowerArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -79,9 +163,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = -210.0
+offset_top = -218.0
 offset_right = -32.0
-offset_bottom = -86.0
+offset_bottom = -94.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 18
@@ -104,19 +188,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Choice 3"
 
-[node name="Hint" type="Label" parent="."]
+[node name="LevelUpButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = -72.0
+offset_top = -84.0
+offset_right = 250.0
+offset_bottom = -26.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Level Up"
+
+[node name="Hint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 270.0
+offset_top = -84.0
 offset_right = -240.0
-offset_bottom = -24.0
+offset_bottom = -26.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Choose one of three buildings. The tower grows, stats change, new choices appear."
+text = "Choose a building, then place it into a highlighted slot on the current level. Use Up/Down arrows to scroll."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -129,9 +227,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -210.0
-offset_top = -72.0
+offset_top = -84.0
 offset_right = -32.0
-offset_bottom = -24.0
+offset_bottom = -26.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Reset"
