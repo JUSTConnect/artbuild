@@ -21,6 +21,7 @@ func _process(_delta: float) -> void:
 	if game_root == null:
 		return
 	_apply_compact_layout()
+	_simplify_top_hud()
 
 func _bind_scene() -> void:
 	game_root = get_tree().current_scene as Control
@@ -71,6 +72,29 @@ func _apply_compact_layout() -> void:
 		hint.visible = false
 		hint.position = Vector2.ZERO
 		hint.size = Vector2.ZERO
+
+func _simplify_top_hud() -> void:
+	var level_info: Label = game_root.get_node_or_null("LevelInfo") as Label
+	if level_info == null:
+		return
+	if game_root.get("game_started") != true:
+		return
+	var unlocked_level: int = int(game_root.get("unlocked_level"))
+	var camera_zoom: float = float(game_root.get("camera_zoom"))
+	var free_cells: int = _free_cells_on_level(unlocked_level)
+	level_info.text = "Уровень: %d | Свободно: %d | Zoom: %.2f" % [unlocked_level, free_cells, camera_zoom]
+
+func _free_cells_on_level(level: int) -> int:
+	var surfaces: Array = game_root.get("surfaces")
+	var count: int = 0
+	for surface_index: int in range(surfaces.size()):
+		var surface: Dictionary = surfaces[surface_index]
+		var cells: int = int(surface["cells"])
+		for cell: int in range(cells):
+			var occupied: bool = bool(game_root.call("_is_cell_occupied", surface_index, level, cell))
+			if not occupied:
+				count += 1
+	return count
 
 func _set_control_rect(path: String, pos: Vector2, rect_size: Vector2) -> void:
 	var control: Control = game_root.get_node_or_null(path) as Control
