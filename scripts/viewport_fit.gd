@@ -6,7 +6,7 @@ const PAD: float = 12.0
 const BUTTON_H: float = 34.0
 const CHOICE_H: float = 66.0
 const ROW_GAP: float = 8.0
-const TOWER_TOP_EXTRA: float = 34.0
+const TOWER_TOP_EXTRA: float = 52.0
 const TOWER_BOTTOM_GAP: float = 10.0
 
 var game_root: Control = null
