@@ -16,6 +16,13 @@ const ZOOM_STEP: float = 0.1
 const PAN_STEP: float = 96.0
 
 const TERRAIN_KEYS: Array[String] = ["plateau", "river", "islands", "mountains"]
+const SKY_COLORS: Array[Color] = [
+	Color(0.46, 0.70, 0.96, 1.0),
+	Color(0.78, 0.62, 0.94, 1.0),
+	Color(0.96, 0.68, 0.48, 1.0),
+	Color(0.55, 0.78, 0.70, 1.0),
+	Color(0.38, 0.48, 0.76, 1.0)
+]
 
 const BUILDING_TYPES: Array[Dictionary] = [
 	{"id":"housing", "title":"Жилище", "glyph":"H", "color":Color(0.74, 0.84, 0.76, 1.0), "residents":2, "energy":-1, "beauty":1, "tech":0, "comfort":0},
@@ -52,6 +59,7 @@ const SHAPES: Array[Dictionary] = [
 ]
 
 @onready var title_label: Label = $Title
+@onready var background_rect: ColorRect = $Background
 @onready var menu_panel: Control = $MenuPanel
 @onready var cells_option: OptionButton = $MenuPanel/CellsOption
 @onready var terrain_option: OptionButton = $MenuPanel/TerrainOption
@@ -209,10 +217,11 @@ func start_game() -> void:
 	tower_area.visible = true
 	choice_bar.visible = true
 	level_up_button.visible = true
-	hint.visible = true
+	hint.visible = false
 	reset_button.visible = true
 	_fit_fixed_layout()
 	_reset_state()
+	_apply_run_background()
 	_build_surfaces()
 	roll_choices()
 	render_world()
@@ -235,6 +244,12 @@ func _reset_state() -> void:
 	beauty = 2
 	technology = 0
 	comfort = 1
+
+func _apply_run_background() -> void:
+	if background_rect == null:
+		return
+	var color_index: int = rng.randi_range(0, SKY_COLORS.size() - 1)
+	background_rect.color = SKY_COLORS[color_index]
 
 func _build_surfaces() -> void:
 	surfaces.clear()
@@ -494,10 +509,16 @@ func _draw_surface(surface_index: int) -> void:
 	var surface: Dictionary = surfaces[surface_index]
 	var cells: int = int(surface["cells"])
 	var ground_width: float = float(cells) * CELL_W
+	var x: float = float(surface["x"])
 	var y: float = _level_y(surface_index, 0) + CELL_H + 8.0
-	_add_rect(Vector2(float(surface["x"]), y), Vector2(ground_width, 24.0), Color(0.25, 0.28, 0.30, 1.0))
-	var label: Label = _add_label(Vector2(float(surface["x"]), y + 28.0), Vector2(ground_width, 28.0), _surface_name(surface_index))
-	label.modulate = Color(0.75, 0.78, 0.82, 1.0)
+
+	# Mountains behind the build surface.
+	_add_rect(Vector2(x - 28.0, y - 64.0), Vector2(ground_width + 56.0, 40.0), Color(0.30, 0.34, 0.40, 1.0))
+	_add_rect(Vector2(x + 8.0, y - 42.0), Vector2(ground_width - 16.0, 24.0), Color(0.40, 0.46, 0.50, 1.0))
+
+	# Ground and grass.
+	_add_rect(Vector2(x, y), Vector2(ground_width, 24.0), Color(0.34, 0.30, 0.26, 1.0))
+	_add_rect(Vector2(x, y - 8.0), Vector2(ground_width, 10.0), Color(0.32, 0.72, 0.30, 1.0))
 
 func _draw_level_guide() -> void:
 	for surface_index: int in range(surfaces.size()):
@@ -583,24 +604,21 @@ func _surface_name(surface_index: int) -> String:
 
 func _update_level_button() -> void:
 	var is_level_ready: bool = _can_level_up()
-	var req: Dictionary = _level_up_requirements()
 	level_up_button.disabled = not is_level_ready
 	if is_level_ready:
 		level_up_button.modulate = Color(0.55, 1.0, 0.52, 1.0)
-		level_up_button.text = "LEVEL UP"
 	else:
 		level_up_button.modulate = Color(0.55, 0.55, 0.55, 1.0)
-		level_up_button.text = "Level Up\nB%d T%d R%d" % [req["beauty"], req["tech"], req["population"]]
+	level_up_button.text = "Level Up"
 
 func update_stats() -> void:
 	var energy_balance: int = energy_produced - energy_required
 	var energy_state: String = "LOW"
 	if energy_balance >= 0:
 		energy_state = "OK"
-	var req: Dictionary = _level_up_requirements()
 	var free_cells: int = _free_cells_on_level(unlocked_level)
-	level_info.text = "Уровень: %d | Свободно: %d | Zoom: %.2f | Выбрано: %s" % [unlocked_level, free_cells, camera_zoom, _selected_title()]
-	stats.text = "Terrain: %s\nCells: %d\nTurn: %d\nBlocks: %d\nResidents: %d/%d\nEnergy: %d/%d (%s)\nBeauty: %d Tech: %d Comfort: %d\nNext: B%d T%d R%d" % [_terrain_title(), cells_per_level, turn, placed_blocks.size(), population, capacity, energy_produced, energy_required, energy_state, beauty, technology, comfort, req["beauty"], req["tech"], req["population"]]
+	level_info.text = "Уровень: %d | Свободно: %d" % [unlocked_level, free_cells]
+	stats.text = "Cells: %d\nTurn: %d\nBlocks: %d\nResidents: %d/%d\nEnergy: %d/%d (%s)\nBeauty: %d Tech: %d Comfort: %d" % [cells_per_level, turn, placed_blocks.size(), population, capacity, energy_produced, energy_required, energy_state, beauty, technology, comfort]
 
 func _free_cells_on_level(level: int) -> int:
 	var count: int = 0
@@ -642,7 +660,8 @@ func _zoom_camera(delta: float) -> void:
 func _focus_active_level() -> void:
 	var bounds: Rect2 = _content_bounds()
 	var active_y: float = _active_level_y()
-	camera_pan.y = CAMERA_PAD - active_y * camera_zoom
+	var target_y: float = tower_area.size.y * 0.72
+	camera_pan.y = target_y - active_y * camera_zoom
 	camera_pan.x = tower_area.size.x / 2.0 - bounds.get_center().x * camera_zoom
 	_apply_camera_bounds()
 
