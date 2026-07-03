@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 
 CameraInput="*res://scripts/camera_input.gd"
 SupportRules="*res://scripts/support_rules.gd"
+ViewportFit="*res://scripts/viewport_fit.gd"
 
 [display]
 
