@@ -16,12 +16,12 @@ const ZOOM_STEP: float = 0.1
 const PAN_STEP: float = 96.0
 
 const TERRAIN_KEYS: Array[String] = ["plateau", "river", "islands", "mountains"]
-const SKY_COLORS: Array[Color] = [
-	Color(0.46, 0.70, 0.96, 1.0),
-	Color(0.78, 0.62, 0.94, 1.0),
-	Color(0.96, 0.68, 0.48, 1.0),
-	Color(0.55, 0.78, 0.70, 1.0),
-	Color(0.38, 0.48, 0.76, 1.0)
+const SKY_COLORS: Array[Array] = [
+	[Color(0.54, 0.76, 0.95, 1.0), Color(0.83, 0.91, 0.98, 1.0)],
+	[Color(0.67, 0.78, 0.95, 1.0), Color(0.92, 0.93, 0.98, 1.0)],
+	[Color(0.79, 0.73, 0.92, 1.0), Color(0.95, 0.90, 0.96, 1.0)],
+	[Color(0.95, 0.78, 0.67, 1.0), Color(0.98, 0.90, 0.84, 1.0)],
+	[Color(0.63, 0.82, 0.76, 1.0), Color(0.90, 0.96, 0.93, 1.0)]
 ]
 
 const BUILDING_TYPES: Array[Dictionary] = [
@@ -249,7 +249,36 @@ func _apply_run_background() -> void:
 	if background_rect == null:
 		return
 	var color_index: int = rng.randi_range(0, SKY_COLORS.size() - 1)
-	background_rect.color = SKY_COLORS[color_index]
+	var colors: Array = SKY_COLORS[color_index]
+	var top_color: Color = colors[0]
+	var bottom_color: Color = colors[1]
+
+	var gradient := Gradient.new()
+	gradient.colors = PackedColorArray([top_color, bottom_color])
+	gradient.offsets = PackedFloat32Array([0.0, 1.0])
+
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill = GradientTexture2D.FILL_LINEAR
+	texture.fill_from = Vector2(0.5, 0.0)
+	texture.fill_to = Vector2(0.5, 1.0)
+	texture.width = 32
+	texture.height = 512
+
+	var sky: TextureRect = get_node_or_null("SkyGradient")
+	if sky == null:
+		sky = TextureRect.new()
+		sky.name = "SkyGradient"
+		sky.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sky.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sky.stretch_mode = TextureRect.STRETCH_SCALE
+		add_child(sky)
+		move_child(sky, 0)
+
+	sky.position = Vector2.ZERO
+	sky.size = size
+	sky.texture = texture
+	background_rect.color = Color(1, 1, 1, 0)
 
 func _build_surfaces() -> void:
 	surfaces.clear()
@@ -510,15 +539,15 @@ func _draw_surface(surface_index: int) -> void:
 	var cells: int = int(surface["cells"])
 	var ground_width: float = float(cells) * CELL_W
 	var x: float = float(surface["x"])
-	var y: float = _level_y(surface_index, 0) + CELL_H + 8.0
+	var floor_bottom: float = _level_y(surface_index, 0) + CELL_H
 
-	# Mountains behind the build surface.
-	_add_rect(Vector2(x - 28.0, y - 64.0), Vector2(ground_width + 56.0, 40.0), Color(0.30, 0.34, 0.40, 1.0))
-	_add_rect(Vector2(x + 8.0, y - 42.0), Vector2(ground_width - 16.0, 24.0), Color(0.40, 0.46, 0.50, 1.0))
+	# Soft distant hills behind the ground.
+	_add_rect(Vector2(x - 18.0, floor_bottom + 2.0), Vector2(ground_width + 36.0, 10.0), Color(0.52, 0.63, 0.72, 0.55))
+	_add_rect(Vector2(x - 8.0, floor_bottom + 8.0), Vector2(ground_width + 16.0, 12.0), Color(0.42, 0.52, 0.60, 0.45))
 
-	# Ground and grass.
-	_add_rect(Vector2(x, y), Vector2(ground_width, 24.0), Color(0.34, 0.30, 0.26, 1.0))
-	_add_rect(Vector2(x, y - 8.0), Vector2(ground_width, 10.0), Color(0.32, 0.72, 0.30, 1.0))
+	# Grass and soil directly under the first floor.
+	_add_rect(Vector2(x, floor_bottom), Vector2(ground_width, 8.0), Color(0.32, 0.72, 0.30, 1.0))
+	_add_rect(Vector2(x, floor_bottom + 8.0), Vector2(ground_width, 28.0), Color(0.34, 0.30, 0.26, 1.0))
 
 func _draw_level_guide() -> void:
 	for surface_index: int in range(surfaces.size()):
@@ -535,11 +564,11 @@ func _draw_block(block: Dictionary) -> void:
 	for index: int in range(footprint.size()):
 		var rel: Vector2i = footprint[index] as Vector2i
 		var pos: Vector2 = _slot_position(surface_index, anchor_level + rel.y, anchor_cell + rel.x)
-		_add_rect(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), building["color"] as Color)
+		_add_rect(pos, Vector2(CELL_W, CELL_H), building["color"] as Color)
 		var cell_text: String = str(building["glyph"])
 		if index == 0:
 			cell_text = "%s\n%s" % [str(building["glyph"]), str(building["shape_title"])]
-		var label: Label = _add_label(pos, Vector2(CELL_W - 8.0, CELL_H - 8.0), cell_text)
+		var label: Label = _add_label(pos, Vector2(CELL_W, CELL_H), cell_text)
 		label.modulate = Color(0.08, 0.09, 0.11, 1.0)
 
 func _draw_current_level_slots() -> void:
@@ -556,7 +585,7 @@ func _draw_current_level_slots() -> void:
 			var pos: Vector2 = _slot_position(surface_index, unlocked_level, cell)
 			var slot_button: Button = Button.new()
 			slot_button.position = pos
-			slot_button.size = Vector2(CELL_W - 8.0, CELL_H - 8.0)
+			slot_button.size = Vector2(CELL_W, CELL_H)
 			slot_button.text = "L%d\nslot" % unlocked_level
 			slot_button.modulate = Color(0.95, 0.84, 0.32, 0.85) if selected_building.is_empty() else Color(0.55, 0.95, 0.62, 1.0)
 			slot_button.pressed.connect(_on_slot_pressed.bind(surface_index, cell))
@@ -660,7 +689,7 @@ func _zoom_camera(delta: float) -> void:
 func _focus_active_level() -> void:
 	var bounds: Rect2 = _content_bounds()
 	var active_y: float = _active_level_y()
-	var target_y: float = tower_area.size.y * 0.72
+	var target_y: float = tower_area.size.y * 0.84
 	camera_pan.y = target_y - active_y * camera_zoom
 	camera_pan.x = tower_area.size.x / 2.0 - bounds.get_center().x * camera_zoom
 	_apply_camera_bounds()
