@@ -6,7 +6,7 @@ const PAD: float = 12.0
 const BUTTON_H: float = 34.0
 const CHOICE_H: float = 66.0
 const ROW_GAP: float = 8.0
-const TOWER_TOP_EXTRA: float = 18.0
+const TOWER_TOP_EXTRA: float = 34.0
 const TOWER_BOTTOM_GAP: float = 10.0
 
 var game_root: Control = null
@@ -22,6 +22,7 @@ func _process(_delta: float) -> void:
 		return
 	_apply_compact_layout()
 	_simplify_top_hud()
+	_clean_level_button()
 
 func _bind_scene() -> void:
 	game_root = get_tree().current_scene as Control
@@ -80,9 +81,16 @@ func _simplify_top_hud() -> void:
 	if game_root.get("game_started") != true:
 		return
 	var unlocked_level: int = int(game_root.get("unlocked_level"))
-	var camera_zoom: float = float(game_root.get("camera_zoom"))
 	var free_cells: int = _free_cells_on_level(unlocked_level)
-	level_info.text = "Уровень: %d | Свободно: %d | Zoom: %.2f" % [unlocked_level, free_cells, camera_zoom]
+	level_info.text = "Уровень: %d | Свободно: %d" % [unlocked_level, free_cells]
+
+func _clean_level_button() -> void:
+	var level_button: Button = game_root.get_node_or_null("LevelUpButton") as Button
+	if level_button != null:
+		level_button.text = "Level Up"
+	var hint: Label = game_root.get_node_or_null("Hint") as Label
+	if hint != null:
+		hint.visible = false
 
 func _free_cells_on_level(level: int) -> int:
 	var surfaces: Array = game_root.get("surfaces")
