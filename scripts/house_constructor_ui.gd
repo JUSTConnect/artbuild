@@ -151,9 +151,11 @@ func _fit_panel() -> void:
 	_set_rect("BackButton", Vector2(PAD + (bw + 9.0) * 2.0, h - 64.0), Vector2(bw, 42.0))
 
 func _generate_blueprint() -> void:
-	if not Engine.has_singleton("HouseGenerator"):
+	var generator: Node = get_node_or_null("/root/HouseGenerator")
+	if generator == null:
+		if summary_label != null:
+			summary_label.text = "HouseGenerator autoload is missing"
 		return
-	var generator: Node = get_node("/root/HouseGenerator")
 	var params: Dictionary = {
 		"seed": int(seed_box.value) if seed_box != null else randi(),
 		"footprint": footprint_option.get_item_text(footprint_option.selected) if footprint_option != null else "1x1",
