@@ -21,6 +21,8 @@ CameraInput="*res://scripts/camera_input.gd"
 SupportRules="*res://scripts/support_rules.gd"
 ViewportFit="*res://scripts/viewport_fit.gd"
 MenuFit="*res://scripts/menu_fit.gd"
+HouseGenerator="*res://scripts/house_generator.gd"
+HouseConstructorUI="*res://scripts/house_constructor_ui.gd"
 
 [display]
 
